@@ -1,6 +1,7 @@
 package com.luv2code.web.jdbc;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -82,5 +83,39 @@ public class StudentDbUtil {
 			
 		}
 		
+	}
+
+	public void addStudent(Student theStudent) throws Exception{
+		
+		Connection myConnection = null;
+		PreparedStatement myStatement = null;
+		
+		try {
+			// get the connection
+			myConnection = dataSource.getConnection();
+			
+			// create SQL statement
+			String sql = "insert into student " 
+					+ "(first_name, last_name, email) "
+					+ "values (?, ?, ?)";
+			
+			myStatement  = myConnection.prepareStatement(sql);
+			
+			// set the parameter values for the student
+			myStatement.setString(1, theStudent.getFirstName());
+			myStatement.setString(2, theStudent.getLastName());
+			myStatement.setString(3, theStudent.getEmail());
+			
+			// execute the statement
+			myStatement.execute();
+			
+			return;
+			
+		}finally {
+			
+			// close JDBC objects
+			Close(myConnection, myStatement, null);
+			
+		}
 	}
 }

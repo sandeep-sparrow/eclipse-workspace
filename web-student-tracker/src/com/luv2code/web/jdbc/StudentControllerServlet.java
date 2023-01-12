@@ -29,28 +29,63 @@ public class StudentControllerServlet extends HttpServlet {
 		super.init();
 		
 		// create instance student DB utility and pass in the connection pool / data Source
-		
 		try {
 			studentDbUtil = new StudentDbUtil(dataSource);
-			
-		} catch (Exception exc) {
+		} 
+		catch (Exception exc) {
 			throw new ServletException(); 
 		}
+		
 	}
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		// list the students ... in MVC Fashion
-		
 		try {
-			listStudents(request, response);
-		} catch (Exception exc) {
+			// read the command parameter
+			String theCommand = request.getParameter("command");
+			
+			// if the command is blank or empty do the default list the students
+			if(theCommand == null) {
+				theCommand = "LIST";
+			}
+			// route the appropriate method - routing logic
+			switch (theCommand) {
+			case "LIST": 
+				listStudents(request, response);
+				break;
+				
+			case "ADD":
+				addStudent(request, response);
+				break;
+				
+			default:
+				listStudents(request, response);
+			}
+		}
+		catch (Exception exc) {
 			exc.printStackTrace();
 		}
 		
 	}
 
+	private void addStudent(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		// read student info from form data
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		String email = request.getParameter("email");
+		
+		// create a new student object
+		Student theStudent = new Student(firstName, lastName, email);
+		
+		// add the student to the database
+		studentDbUtil.addStudent(theStudent);
+		
+		// send back the main page ( get list of student again)
+		listStudents(request, response);
+		
+	}
 
 	private void listStudents(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
