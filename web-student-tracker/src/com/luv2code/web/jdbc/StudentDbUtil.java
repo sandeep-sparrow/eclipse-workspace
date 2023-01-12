@@ -40,7 +40,7 @@ public class StudentDbUtil {
 			// process the result set
 			while(myResultSet.next()) {
 				// retrieve data from result set row
-				int id = myResultSet.getInt("id");
+				int id = myResultSet.getInt("ID");
 				String firstName = myResultSet.getString("first_name");
 				String lastName = myResultSet.getString("last_name");
 				String email = myResultSet.getString("email");
@@ -115,6 +115,94 @@ public class StudentDbUtil {
 			
 			// close JDBC objects
 			Close(myConnection, myStatement, null);
+			
+		}
+	}
+
+	public Student getStudent(String studentId) throws Exception {
+
+		Student theStudent = null;
+		
+		Connection myConnection = null;
+		PreparedStatement myStatement = null;
+		ResultSet myResultSet = null;
+		
+		int id;
+		
+		try {
+			
+			// covert the string student id to integer
+			id = Integer.parseInt(studentId);
+			
+			// get the connection
+			myConnection = dataSource.getConnection();
+			
+			// create SQL statement
+			String sql = "select * from student where id=?";
+			
+			myStatement  = myConnection.prepareStatement(sql);
+			
+			// set the parameter values for the student
+			myStatement.setInt(1, id);
+			
+			// execute the statement
+			myResultSet = myStatement.executeQuery();
+			
+			// retrieve data from result set
+			if(myResultSet.next()) {
+				
+				String firstName = myResultSet.getString("first_name");
+				String lastName = myResultSet.getString("last_name");
+				String email = myResultSet.getString("email");
+				
+				theStudent = new Student(id, firstName, lastName, email);
+			}else {
+				throw new Exception("could not find the student with id: " + id);
+			}
+			
+			return theStudent;
+			
+		}finally {
+			
+			// close JDBC objects
+			Close(myConnection, myStatement, myResultSet);
+			
+		}
+	}
+
+	public void updateStudent(Student theUpdateStudent) throws Exception {
+		
+		Connection myConnection = null;
+		PreparedStatement myStatement = null;
+		ResultSet myResultSet = null;
+		
+		try {
+			
+			// get the connection
+			myConnection = dataSource.getConnection();
+			
+			// create SQL statement
+			String sql = "update student "
+					   + "set first_name=?, last_name=?, email=? "
+					   + "where id=?";
+			
+			myStatement  = myConnection.prepareStatement(sql);
+			
+			// set the parameter values for the student
+			myStatement.setString(1, theUpdateStudent.getFirstName());
+			myStatement.setString(2, theUpdateStudent.getLastName());
+			myStatement.setString(3, theUpdateStudent.getEmail());
+			myStatement.setInt(4, theUpdateStudent.getId());
+			
+			// execute the statement
+			myStatement.execute();
+			
+			return;
+			
+		}finally {
+			
+			// close JDBC objects
+			Close(myConnection, myStatement, myResultSet);
 			
 		}
 	}
