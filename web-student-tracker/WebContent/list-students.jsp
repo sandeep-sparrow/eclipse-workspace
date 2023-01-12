@@ -13,7 +13,7 @@
         <link type="text/css" rel="stylesheet" href="css/style.css"/>
 	</head>
 	<body>
-		<div id="wrpper">
+		<div id="wrapper">
 			<div id="header">
 				<h2>Luv2Code University</h2>
 			</div>
@@ -36,6 +36,8 @@
 					</table>
 				</div>
 			</div>
+			<hr>
+			<a href="/web-student-tracker">Home Page</a>
 		</div>
 
 	</body>
