@@ -22,7 +22,7 @@ public class TestServlet extends HttpServlet {
         super();
     }
 
-    // Define datasource/connection pool for resource injection
+    // Define data source / connection pool for resource injection
     @Resource(name="jdbc/web_student_tracker")
     private DataSource dataSource;
     
@@ -42,11 +42,11 @@ public class TestServlet extends HttpServlet {
 		try {
 			myConnection = dataSource.getConnection();
 			
-			// create a sql statement
+			// create a SQL statement
 			String sql = "select * from student";
 			myStatement = myConnection.createStatement();
 			
-			// execute the sql statement
+			// execute the SQL statement
 			myResultSet = myStatement.executeQuery(sql);
 			
 			// process the result
