@@ -25,7 +25,7 @@ public class StudentListServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		// get the data from util class
+		// get the data from Utility class
 		List<Student> students = StudentDataUtil.getStudents();
 		
 		// add the students data to request object
