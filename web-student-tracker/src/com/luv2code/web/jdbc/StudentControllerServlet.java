@@ -22,7 +22,6 @@ public class StudentControllerServlet extends HttpServlet {
 	@Resource(name="jdbc/web_student_tracker")
 	private DataSource dataSource;
 	
-	
 	@Override
 	public void init() throws ServletException {
 		
@@ -37,7 +36,6 @@ public class StudentControllerServlet extends HttpServlet {
 		}
 		
 	}
-
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
@@ -67,6 +65,10 @@ public class StudentControllerServlet extends HttpServlet {
 				updateStudent(request, response);
 				break;
 				
+			case "DELETE":
+				deleteStudent(request, response);
+				break;
+				
 			default:
 				listStudents(request, response);
 			}
@@ -77,6 +79,59 @@ public class StudentControllerServlet extends HttpServlet {
 		
 	}
 
+	private void listStudents(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		// get students from DB utility
+		List<Student> students = studentDbUtil.getStudents();
+		
+		// add student to that request object
+		request.setAttribute("STUDENT_LIST", students);
+		
+		// send the JSP page
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/list-students.jsp");
+		
+		// forward to JSP
+		requestDispatcher.forward(request, response);
+		
+	}
+	
+	private void addStudent(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		// read student info from form data
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		String email = request.getParameter("email");
+		
+		// create a new student object
+		Student theStudent = new Student(firstName, lastName, email);
+		
+		// add the student to the database
+		studentDbUtil.addStudent(theStudent);
+		
+		// send back the main page ( get list of student again)
+		listStudents(request, response);
+		
+	}
+	
+	private void loadStudent(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		// read student id from the form data
+		String studentId = request.getParameter("studentId");
+		
+		// getting the student from the data
+		Student theStudent = studentDbUtil.getStudent(studentId);
+		
+		// place the student to the request attribute
+		request.setAttribute("THE_STUDENT", theStudent);
+		
+		// we send this student data to JSP page
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/update-student-form.jsp");
+		
+		// forward to JSP
+		requestDispatcher.forward(request, response);
+		
+	}
+	
 	private void updateStudent(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		// read student id and information from update form data
@@ -95,60 +150,16 @@ public class StudentControllerServlet extends HttpServlet {
 		listStudents(request, response);
 		
 	}
-
-
-	private void loadStudent(HttpServletRequest request, HttpServletResponse response) throws Exception {
 	
+	private void deleteStudent(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
 		// read student id from the form data
 		String studentId = request.getParameter("studentId");
 		
-		// getting the student from the data
-		Student theStudent = studentDbUtil.getStudent(studentId);
+		// delete student from the data
+		studentDbUtil.deleteStudent(studentId);
 		
-		// place the student to the request attribute
-		request.setAttribute("THE_STUDENT", theStudent);
-		
-		// we send this student data to JSP page
-		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/update-student-form.jsp");
-		
-		// forward to JSP
-		requestDispatcher.forward(request, response);
-		
-	}
-
-
-	private void addStudent(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
-		// read student info from form data
-		String firstName = request.getParameter("firstName");
-		String lastName = request.getParameter("lastName");
-		String email = request.getParameter("email");
-		
-		// create a new student object
-		Student theStudent = new Student(firstName, lastName, email);
-		
-		// add the student to the database
-		studentDbUtil.addStudent(theStudent);
-		
-		// send back the main page ( get list of student again)
 		listStudents(request, response);
-		
-	}
-
-	private void listStudents(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
-		// get students from DB utility
-		List<Student> students = studentDbUtil.getStudents();
-		
-		// add student to that request object
-		request.setAttribute("STUDENT_LIST", students);
-		
-		// send the JSP page
-		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/list-students.jsp");
-		
-		// forward to JSP
-		requestDispatcher.forward(request, response);
-		
 	}
 
 }
