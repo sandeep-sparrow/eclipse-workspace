@@ -17,9 +17,14 @@
   	<servlet-class>com.luv2code.jsp.servlet.MyServlet</servlet-class>
   </servlet>
   
-   <servlet>
+  <servlet>
   	<servlet-name>second</servlet-name>
   	<servlet-class>com.luv2code.jsp.servlet.MyGenericServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+  	<servlet-name>third</servlet-name>
+  	<servlet-class>com.luv2code.jsp.servlet.MyHttpServlet</servlet-class>
   </servlet>
   
   <!-- Mapping -->
@@ -28,9 +33,15 @@
   	<url-pattern>/web1</url-pattern>
   </servlet-mapping>
   
-   <servlet-mapping>
+  <servlet-mapping>
   	<servlet-name>second</servlet-name>
   	<url-pattern>/web2</url-pattern>
+  </servlet-mapping>
+  
+  
+  <servlet-mapping>
+  	<servlet-name>third</servlet-name>
+  	<url-pattern>/web3</url-pattern>
   </servlet-mapping>
   
 </web-app>
