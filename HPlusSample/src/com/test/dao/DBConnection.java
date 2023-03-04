@@ -10,9 +10,9 @@ public class DBConnection {
 		Connection connection = null;
 		
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			Class.forName("com.mysql.jdbc.Driver");
 			System.out.println("MySql JDBC Driver Registered!");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hplus?useSSL=false","root","root");
+			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hplus?allowPublicKeyRetrieval=true&useSSL=false","root","root");
 		}catch (ClassNotFoundException e) {
 			System.out.println("Where is your MySQL JDBC Driver?");
 			e.printStackTrace();

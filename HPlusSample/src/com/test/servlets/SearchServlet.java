@@ -25,13 +25,18 @@ public class SearchServlet extends HttpServlet {
 		// collect search string from the web URL
 		String searchString = req.getParameter("search");
 		
+		req.getSession().setAttribute("search", searchString);
+		
 		// call DAO Layer
 		ApplicationDao applicationDao = new ApplicationDao();
 		List<Product> products = applicationDao.searchProducts(searchString);
 		
+		req.setAttribute("products", products);
+		req.getRequestDispatcher("/jsp/searchResult.jsp").forward(req, resp);
+		
 		//write the product data back to the client
-		String page = getHTMLString(req.getServletContext().getRealPath("html/searchResult.html"), products);
-		resp.getWriter().write(page);
+		// String page = getHTMLString(req.getServletContext().getRealPath("html/searchResult.html"), products);
+		// resp.getWriter().write(page);
 	}
 	
 	public String getHTMLString(String filePath, List<Product> products) throws IOException {
