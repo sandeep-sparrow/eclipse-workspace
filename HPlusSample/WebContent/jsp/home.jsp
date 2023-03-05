@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<%@page import="java.util.Calendar"%>
-<%@page import="java.util.Date"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<html lang="en">
 <head>
-<link rel="stylesheet" href="css/style.css">
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>H+ Sport</title>
-
+<link rel="stylesheet" href="css/style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 	<header id="home" class="header">
@@ -18,8 +17,16 @@
 						alt="Logo - H Plus Sports"></a>
 				</div>
 				<!-- branding -->
+
 				<ul class="navbar">
 					<li><a href="home">home</a></li>
+					<li><a href="orderHistory">order history</a></li>
+					<!-- <li><a href="viewProfile">view my profile</a></li> -->
+					<li><a href='<%=response.encodeURL("getProfileDetails")%>'>
+						view my profile
+						</a>
+					</li>							
+					<li><a href='logout'>logout</a></li>
 					<li><a href="redirect">linkedIn</a></li>
 
 				</ul>
@@ -32,36 +39,45 @@
     <p>We support and encourage <em>active and healthy</em> lifestyles, by offering <em>ethically sourced</em> and <em>eco-friendly</em> nutritional products for the <em>performance-driven</em> athlete.</p>
   </div>container tagline -->
 	</header>
-	<!-- #home -->
 
+	<fmt:setBundle basename="com.test.resources.applicationResources"
+		var="message" scope="session" />
 
+	<section id="orders" class="section">
+		<div class="container">
+			<c:if test="${requestScope.items!=null}">
+				<h2 class="headline">
+					<fmt:message key="label.home.orders" bundle="${message}"></fmt:message>
+				</h2>
+				<table id="orderHistory">
 
-	<section>
-	
-	<%= displayDate() %>
-	
-	</section>
-	<section id="login" class="section">
-		<div class="container tagline">
-			<% if(request.getAttribute("error")!=null){ %>
-			<em><%=request.getAttribute("error")%></em><br />
-			<%} %>
+					<tr>
+						<th><fmt:message key="label.home.table.header1"
+								bundle="${message}"></fmt:message></th>
+						<th>Product Name</th>
+						<th>Order Date</th>
+						<th>Product Image</th>
 
-			<em>LOGIN USER</em>
-			<form action="login" method="post">
-				<label>Username</label> <input type="text" name="username"
-					id="username"><br /> <label>Password</label> <input
-					type="password" name="password" id="password"><br /> <input
-					type="submit" value="Login">
-			</form>
+					</tr>
+
+					<c:forEach items="${requestScope.items}" var="item">
+						<tr>
+
+							<td>${item.orderId}</td>
+							<td>${item.productName}</td>
+							<td>${item.orderDate}</td>
+							<td><img width="200px" height="150px"
+								src="${item.productImgPath}"></td>
+						</tr>
+					</c:forEach>
+				</table>
+			</c:if>
 		</div>
 	</section>
-	<!-- #products -->
 
 
 	<footer class="footer">
 		<div class="container">
-
 			<nav class="nav" role="navigation">
 				<div class="container nav-elements">
 					<div class="branding">
@@ -84,12 +100,9 @@
 		<!-- container -->
 	</footer>
 	<!-- footer -->
-	<%!
-		public String displayDate(){
-			SimpleDateFormat dateFormat = new SimpleDateFormat("YYY-MM-DD hh:mm");
-			Date date = Calendar.getInstance().getTime();
-			return dateFormat.format(date);
-		}
-	%>
+
+
+
+
 </body>
 </html>
