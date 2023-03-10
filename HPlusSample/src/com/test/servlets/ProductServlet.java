@@ -1,6 +1,7 @@
 package com.test.servlets;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +56,10 @@ public class ProductServlet extends HttpServlet{
 		// get the search Result 
 		System.out.println("getting all products by using Application dao");
 		ApplicationDao dao = new ApplicationDao();
-		List<Product> products = dao.searchProducts(search);
+		
+		Connection connection = (Connection) getServletContext().getAttribute("dbConnection");
+		
+		List<Product> products = dao.searchProducts(search, connection);
 		
 		// set the search result in request scope
 		System.out.println("Setting all the products from dao to \"products\" object");

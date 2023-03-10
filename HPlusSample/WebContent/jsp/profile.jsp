@@ -1,6 +1,8 @@
 <%@page import="java.util.Calendar"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html >
 <html>
 <head>
@@ -32,15 +34,19 @@
 			</div>
 			<!-- container nav-elements -->
 		</nav>
-		<!-- <div class="container tagline">
-    <h1 class="headline">Our Mission</h1>
-    <p>We support and encourage <em>active and healthy</em> lifestyles, by offering <em>ethically sourced</em> and <em>eco-friendly</em> nutritional products for the <em>performance-driven</em> athlete.</p>
-  </div>container tagline -->
+		<div class="container tagline">
+    		<h1 class="headline">Our Mission</h1>
+    		<p>
+	    		We support and encourage <em>active and healthy</em> 
+	    		lifestyles, by offering <em>ethically sourced</em> 
+	    		and <em>eco-friendly</em> nutritional products for the 
+	    		<em>performance-driven</em> athlete.
+    		</p>
+  		</div>
 	</header>
 
-	<jsp:useBean id="user" scope="request" type="com.test.beans.User"></jsp:useBean>
+    <jsp:useBean id="user" scope="request" type="com.test.beans.User"></jsp:useBean>
 	<section>
-
 		<ex:formatDate date="<%=Calendar.getInstance().getTime()%>"
 			format="dd-MM-YYYY hh:mm"></ex:formatDate>
 	</section>
@@ -52,7 +58,7 @@
 
 				<tr>
 					<td>Username</td>
-					<td><jsp:getProperty property="username" name="user" /></td>
+					<td>${user.username}</td>
 				</tr>
 				<tr>
 					<td>First Name</td>
@@ -64,13 +70,30 @@
 				</tr>
 				<tr>
 					<td>Age</td>
-					<td>${user.age}</td>
+					<td>${user.age}></td>
 				</tr>
 				<tr>
 					<td>Interested in</td>
 					<td>${user.activity}</td>
 				</tr>
 
+			</table>
+		</div>
+		<div class="container">
+			<h2 class="headline">Weight Summary</h2>
+			<table id="weightSummary">
+				<tr>
+					<td>January</td>
+					<td>${requestScope.weightSummary["January"]*2}</td>
+				</tr>
+				<tr>
+					<td>February</td>
+					<td>${requestScope.weightSummary["February"]/2}</td>
+				</tr>
+				<tr>
+					<td>March</td>
+					<td>${requestScope.weightSummary["March"]}</td>
+				</tr>
 			</table>
 		</div>
 	</section>

@@ -3,6 +3,7 @@ package com.test.servlets;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -29,7 +30,11 @@ public class SearchServlet extends HttpServlet {
 		
 		// call DAO Layer
 		ApplicationDao applicationDao = new ApplicationDao();
-		List<Product> products = applicationDao.searchProducts(searchString);
+		
+		// get the connection from listener servlet
+		Connection connection = (Connection) getServletContext().getAttribute("dbConnection");
+		
+		List<Product> products = applicationDao.searchProducts(searchString, connection);
 		
 		req.setAttribute("products", products);
 		req.getRequestDispatcher("/jsp/searchResult.jsp").forward(req, resp);

@@ -5,14 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.test.beans.Order;
 import com.test.beans.Product;
 import com.test.beans.User;
 
 public class ApplicationDao {
 	
-	public List<Product> searchProducts(String searchString){
+	public List<Product> searchProducts(String searchString, Connection connection){
 		
 		Product product = null;
 		
@@ -20,8 +22,8 @@ public class ApplicationDao {
 		
 		try {
 			// get the connection
-			Connection connection = DBConnection.getConnectionToDatabase();
-			
+			// Connection connection = DBConnection.getConnectionToDatabase();
+						
 			// write sql query
 			String sql = "select * from products where product_name like '%" + searchString + "%'";
 			
@@ -93,5 +95,60 @@ public class ApplicationDao {
 		}
 		return isValidUser;
 		
+	}
+	
+	public User getProfileDetails(String userName) {
+		User user = null;
+		try {
+			Connection connection = DBConnection.getConnectionToDatabase();
+			
+			String sql = "select * from users where username=?";
+			
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, userName);
+			
+			ResultSet set = statement.executeQuery();
+			while(set.next()) {
+				user = new User();
+				user.setUsername(set.getString("username"));
+				user.setFirstName(set.getString("first_name"));
+				user.setLastName(set.getString("last_name"));
+				user.setActivity(set.getString("activity"));
+				user.setAge(set.getInt("age"));
+			}
+			
+			
+		}catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		return user;
+	}
+	
+	public List<Order> getOrders(String username){
+		Order order = null;
+		List<Order> orders = new ArrayList<>();
+		try {
+			Connection connection = DBConnection.getConnectionToDatabase();
+			
+			String sql = "select * from orders where user_name=?";
+			
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, username);
+			
+			ResultSet set = statement.executeQuery();
+			
+			while(set.next()) {
+				order = new Order();
+				order.setOrderId(set.getInt("order_id"));
+				order.setProductName(set.getString("product_name"));
+				order.setProductImgPath(set.getString("image_path"));
+				order.setOrderDate(new Date(set.getDate("order_date").getTime()));
+				order.setUsername(set.getString("user_name"));
+				orders.add(order);
+			}
+		}catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		return orders;
 	}
 }

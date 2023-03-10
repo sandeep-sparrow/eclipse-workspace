@@ -17,7 +17,9 @@
 	</head>
 	
 	<body>
-		<%@ include file="/jsp/header.jsp" %>
+<%--    <%@ include file="/jsp/header.jsp" %> --%>
+		<jsp:include page="/jsp/header.jsp"/>
+<%-- 	<jsp:param value="" name=""/> --%>
 		<!-- #home -->
 	
 		<section id="products" class="section">

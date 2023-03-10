@@ -1,11 +1,13 @@
 package com.test.beans;
 
+import java.util.Date;
+
 public class Order {
 
 	private int orderId;
 	private String productName;
 	private String productImgPath;
-	private String orderDate;
+	private Date orderDate;
 	private String username;
 
 	public int getOrderId() {
@@ -32,12 +34,12 @@ public class Order {
 		this.productImgPath = productImgPath;
 	}
 
-	public String getOrderDate() {
+	public Date getOrderDate() {
 		return orderDate;
 	}
 
-	public void setOrderDate(String orderDate) {
-		this.orderDate = orderDate;
+	public void setOrderDate(Date date) {
+		this.orderDate = date;
 	}
 
 	public String getUsername() {
